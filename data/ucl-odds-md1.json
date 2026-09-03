@@ -1,0 +1,19 @@
+{
+  "note": "Drop closing prices in here, one object per fixture, and lib/market-lambda.js turns them into λ. Decimal odds. `line` is the totals line the over/under prices refer to.",
+  "source": null,
+  "captured": null,
+  "fixtures": [
+    {
+      "md": 1,
+      "home": "Real Madrid",
+      "away": "Inter",
+      "example": true,
+      "home_odds": 2.05,
+      "draw_odds": 3.50,
+      "away_odds": 3.60,
+      "over_odds": 1.90,
+      "under_odds": 1.95,
+      "line": 2.5
+    }
+  ]
+}
