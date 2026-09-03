@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  body{margin:0}
+  doc-page{background:#f4f1e6 !important;padding:0 !important;min-width:0 !important}
+  a{color:#c8202e;text-decoration-color:#dfa9ae;text-underline-offset:2px}
+  a:hover{color:#16161a}
+  .kept{break-inside:avoid;orphans:3;widows:3}
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+<doc-page margin="0">
+  <div style="background:#f4f1e6;padding:0.7in">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:Archivo,sans-serif;font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;border-bottom:2px solid #16161a;padding-bottom:8px;margin-bottom:44px">
+    <span>Model specification</span>
+    <span style="color:#c8202e">V2.0 &nbsp;&mdash;&nbsp; League phase 2026&ndash;27</span>
+  </div>
+
+  <h1 style="font-family:Archivo,sans-serif;font-weight:900;font-size:52px;line-height:0.92;letter-spacing:-0.025em;text-transform:uppercase;color:#16161a;margin:0 0 20px;max-width:11em">Champions League fixture difficulty</h1>
+
+  <div style="display:flex;gap:2px;border-bottom:2px solid #16161a;margin-bottom:30px">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="2">
+      <button type="button" onClick="{{ t.onClick }}" style="font-family:Archivo,sans-serif;font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;padding:11px 20px;border:none;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }}">{{ t.label }}</button>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{ onRatings }}" hint-placeholder-val="{{ true }}">
+<section style="margin-bottom:38px;break-inside:auto">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px;break-after:avoid;break-inside:avoid">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">01</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">Fixture difficulty &mdash; projected goals</h2>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;background:#fffdf7;padding:12px 16px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:9px">
+        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;white-space:nowrap">From</span>
+        <input type="range" min="1" max="8" step="1" value="{{ spanFrom }}" onChange="{{ onFromChange }}" onInput="{{ onFromChange }}" style="width:132px;accent-color:#c8202e;cursor:pointer" />
+        <span style="font-family:Archivo,sans-serif;font-size:10.5px;font-weight:800;color:#16161a;min-width:30px">MD{{ spanFrom }}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;white-space:nowrap">To</span>
+        <input type="range" min="1" max="8" step="1" value="{{ spanTo }}" onChange="{{ onToChange }}" onInput="{{ onToChange }}" style="width:132px;accent-color:#c8202e;cursor:pointer" />
+        <span style="font-family:Archivo,sans-serif;font-size:10.5px;font-weight:800;color:#16161a;min-width:30px">MD{{ spanTo }}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;white-space:nowrap">View projections</span>
+        <div style="display:flex;gap:2px">
+          <sc-for list="{{ metricButtons }}" as="m" hint-placeholder-count="3">
+            <button type="button" onClick="{{ m.onClick }}" style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.04em;padding:4px 8px;border:1px solid {{ m.border }};background:{{ m.bg }};color:{{ m.fg }};cursor:pointer">{{ m.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #d8d3c3;padding-bottom:6px;margin-bottom:8px">
+      <span style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a">{{ metricLabel }} &nbsp;&mdash;&nbsp; {{ sortLabel }}</span>
+      <span style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e">{{ spanLabel }}</span>
+    </div>
+    <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:Archivo,sans-serif">
+      <thead>
+        <tr>
+          <th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 4px 5px 0;border-bottom:1px solid #16161a;width:14%">Team</th>
+          <sc-for list="{{ mdHeads }}" as="m" hint-placeholder-count="8">
+            <th style="text-align:center;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:0 2px 5px 0;border-bottom:1px solid #16161a;width:9.7%;color:{{ m.color }}">{{ m.label }}</th>
+          </sc-for>
+          <th style="text-align:right;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#c8202e;padding:0 0 5px 6px;border-bottom:1px solid #16161a;width:9%">Span</th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-for list="{{ gridRows }}" as="r" hint-placeholder-count="36">
+          <tr style="break-inside:avoid">
+            <td style="padding:4px 6px 4px 0;border-bottom:1px solid #f4f1e6;font-size:9.5px;font-weight:800;text-transform:uppercase;color:#16161a;white-space:nowrap">{{ r.name }}</td>
+            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="8">
+              <td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="padding:4px 2px 5px;text-align:center;line-height:1.15;background:{{ c.bg }};color:{{ c.fg }};opacity:{{ c.opacity }}"><div style="font-size:7px;font-weight:800;letter-spacing:-0.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.label }}</div><div style="font-size:9.5px;font-weight:900;font-variant-numeric:tabular-nums;margin-top:1px">{{ c.value }}</div></div></td>
+            </sc-for>
+            <td style="padding:4px 0 4px 6px;border-bottom:1px solid #f4f1e6;text-align:right;font-size:10.5px;font-weight:800;color:#c8202e;font-variant-numeric:tabular-nums">{{ r.spanMean }}</td>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:12px">
+      <p style="font-family:Archivo,sans-serif;font-size:11px;line-height:1.5;color:#7a7870;margin:0;max-width:32em">Cells name the opponent, shaded by difficulty; (H) and (A) mark venue. The <strong style="font-weight:800">Span</strong> column is mean difficulty over the highlighted matchdays, and the table sorts by it &mdash; narrow the span to find who has the worst run through any stretch of the league phase. Source: FPL Schaden MD1&ndash;8 team projections, in <code style="font-size:10.5px">data/ucl-projected-goals.json</code>.</p>
+      <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
+        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#8a877c">Easy</span>
+        <sc-for list="{{ legend }}" as="l" hint-placeholder-count="5">
+          <span style="display:inline-block;min-width:20px;padding:3px 0;text-align:center;font-size:9px;font-weight:800;background:{{ l.bg }};color:{{ l.fg }}">{{ l.label }}</span>
+        </sc-for>
+        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#8a877c">Hard</span>
+      </div>
+    </div>
+  <div style="margin-top:26px;border-top:1px solid #d8d3c3;padding-top:18px">
+      <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 18px;max-width:38em">Difficulty now runs on projected goals for and against, per team per matchday, percentiled across all 288 team&#8209;matches in the league phase. The attack and defence views are ranked independently, which is the split a single difficulty number cannot express.</p>
+      <p style="font-family:Archivo,sans-serif;font-size:13.5px;line-height:1.5;color:#4a4a4d;margin:0 0 18px;max-width:38em">{{ metricNote }}</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:18px">
+        <sc-for list="{{ projectionStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:#fffdf7;padding:11px 13px;border-top:3px solid {{ s.rule }}">
+            <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#8a877c;margin-bottom:3px">{{ s.label }}</div>
+            <div style="font-family:Archivo,sans-serif;font-size:17px;font-weight:800;color:#16161a">{{ s.value }}</div>
+            <div style="font-family:Archivo,sans-serif;font-size:10px;font-weight:600;color:#8a877c;margin-top:2px">{{ s.detail }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background:#fffdf7;border-left:4px solid #c8202e;padding:16px 20px;margin-bottom:20px">
+        <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e;margin-bottom:6px">What the projections are, and are not</div>
+        <p style="font-family:Archivo,sans-serif;font-size:14px;line-height:1.5;color:#2b2b2e;margin:0;max-width:38em">These are a third party's projections, and they are internally consistent: every team's projected goals for equals its opponent's projected goals against across all 288 team&#8209;matches. What they do not carry is an uncertainty band, so two fixtures with the same projection are not distinguishable here. The market&#8209;anchored solver on the model tab remains the route to that, and to a benchmark these can be scored against.</p>
+      </div>
+    </div>
+  </section>
+
+<section style="margin-bottom:38px;break-before:page">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">02</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">The 2026/27 league phase</h2>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;margin:0 0 14px">
+      <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0;max-width:30em">Every team's eight opponents, in matchday order. Four home, four away. This is the fixture set the model scores.</p>
+      <div style="display:flex;gap:14px;font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#4a4a4d;white-space:nowrap">
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:#fffdf7;border:1px solid #16161a"></span>Home</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:#e4dfcf;border:1px solid #16161a"></span>Away</span>
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;border-spacing:0;table-layout:fixed;font-family:Archivo,sans-serif">
+      <thead><tr><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:13%">Team</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD1</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD2</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD3</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD4</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD5</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD6</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD7</th><th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 4px;border-bottom:1px solid #16161a;width:10.8%">MD8</th></tr></thead>
+      <tbody>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">AEK</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Arsenal</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Atlético</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Barça</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Bayern</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Betis</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Bodø</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Brugge</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Como</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Dortmund</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Fener</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Feyenoord</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Galatasaray</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Inter</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">LASK</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Leipzig</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Lens</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Lille</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Liverpool</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Man City</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Man Utd</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Napoli</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bodø</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Paris SG</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Como</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Porto</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">PSV</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Real Madrid</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Roma</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Sabah</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Shakhtar</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AEK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sporting</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Leipzig</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Real Madrid</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Slavia</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arsenal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villarreal</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Porto</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Slovan</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Betis</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Sporting</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lens</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LASK</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shakhtar</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Roma</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man City</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Stuttgart</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slovan</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Inter</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lille</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Viking</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Stuttgart</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bayern</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Villa</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Atlético</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Feyenoord</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PSV</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Villa</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brugge</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Viking</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Barça</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Galatasaray</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td></tr>
+        <tr style="break-inside:avoid"><td style="padding:4px 6px 4px 4px;border-bottom:1px solid #f4f1e6;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#16161a;white-space:nowrap">Villarreal</td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dortmund</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Napoli</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Liverpool</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Paris SG</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Slavia</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Sabah</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#e4dfcf;color:#4a4a4d;padding:4px 5px;font-size:8.5px;font-weight:500;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Fener</div></td><td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="background:#fffdf7;color:#16161a;padding:4px 5px;font-size:8.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Man Utd</div></td></tr>
+      </tbody>
+    </table>
+    <p style="font-family:Archivo,sans-serif;font-size:11px;line-height:1.5;color:#7a7870;margin:12px 0 0">Matchday 1: 8&ndash;10 Sep 2026 &nbsp;/&nbsp; MD2: 13&ndash;14 Oct &nbsp;/&nbsp; MD3: 20&ndash;21 Oct &nbsp;/&nbsp; MD4: 3&ndash;4 Nov &nbsp;/&nbsp; MD5: 24&ndash;25 Nov &nbsp;/&nbsp; MD6: 8&ndash;9 Dec &nbsp;/&nbsp; MD7: 19&ndash;20 Jan 2027 &nbsp;/&nbsp; MD8: 27 Jan. Source: UEFA, 29 August 2026.</p>
+  </section>
+  </sc-if>
+
+  <sc-if value="{{ onPlayers }}" hint-placeholder-val="{{ false }}">
+    <section style="margin-bottom:38px">
+      <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+        <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">01</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">UCL Fantasy player prices</h2>
+      </div>
+
+      <sc-if value="{{ hasPlayers }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:16px">
+          <sc-for list="{{ playerStats }}" as="s" hint-placeholder-count="5">
+            <div style="background:#fffdf7;padding:11px 13px;border-top:3px solid #16161a">
+              <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#8a877c;margin-bottom:3px">{{ s.label }}</div>
+              <div style="font-family:Archivo,sans-serif;font-size:17px;font-weight:800;color:#16161a">{{ s.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;background:#fffdf7;padding:12px 16px;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c">Position</span>
+            <div style="display:flex;gap:2px">
+              <sc-for list="{{ positionButtons }}" as="p" hint-placeholder-count="5">
+                <button type="button" onClick="{{ p.onClick }}" style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;padding:4px 8px;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};cursor:pointer">{{ p.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c">Sort</span>
+            <div style="display:flex;gap:2px">
+              <sc-for list="{{ playerSortButtons }}" as="s" hint-placeholder-count="4">
+                <button type="button" onClick="{{ s.onClick }}" style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;padding:4px 8px;border:1px solid {{ s.border }};background:{{ s.bg }};color:{{ s.fg }};cursor:pointer">{{ s.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c">Club</span>
+            <select value="{{ clubValue }}" onChange="{{ onClubChange }}" style="font-family:Archivo,sans-serif;font-size:10px;font-weight:700;padding:4px 6px;border:1px solid #d8d3c3;background:#f4f1e6;color:#16161a;cursor:pointer;max-width:150px">
+              <sc-for list="{{ clubOptions }}" as="c" hint-placeholder-count="37">
+                <option value="{{ c.value }}">{{ c.label }}</option>
+              </sc-for>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;margin-left:auto">
+            <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c">Per page</span>
+            <input type="range" min="10" max="60" step="10" value="{{ playerLimit }}" onChange="{{ onLimitChange }}" onInput="{{ onLimitChange }}" style="width:96px;accent-color:#c8202e;cursor:pointer" />
+            <span style="font-family:Archivo,sans-serif;font-size:10.5px;font-weight:800;color:#16161a;min-width:26px">{{ playerLimit }}</span>
+          </div>
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;font-family:Archivo,sans-serif">
+          <thead>
+            <tr>
+              <th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 6px 5px 0;border-bottom:1px solid #16161a;width:26%">Player</th>
+              <th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 6px 5px 0;border-bottom:1px solid #16161a;width:24%">Club</th>
+              <th style="text-align:center;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 6px 5px 0;border-bottom:1px solid #16161a;width:9%">Pos</th>
+              <th style="text-align:right;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#c8202e;padding:0 6px 5px 0;border-bottom:1px solid #16161a;width:11%">Price</th>
+              <th style="text-align:right;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 6px 5px 0;border-bottom:1px solid #16161a;width:10%">Pts</th>
+              <th style="text-align:right;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 6px 5px 0;border-bottom:1px solid #16161a;width:10%">Pts/€m</th>
+              <th style="text-align:right;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 0 5px 0;border-bottom:1px solid #16161a;width:10%">Sel %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ playerRows }}" as="p" hint-placeholder-count="40">
+              <tr style="break-inside:avoid">
+                <td style="padding:5px 6px 5px 0;border-bottom:1px solid #e2ddcd;font-size:10.5px;font-weight:700;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</td>
+                <td style="padding:5px 6px 5px 0;border-bottom:1px solid #e2ddcd;font-size:10px;font-weight:500;color:#4a4a4d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                  <span style="display:inline-flex;align-items:center;gap:6px">
+                    <sc-if value="{{ p.mark.src }}" hint-placeholder-val="{{ false }}"><img src="{{ p.mark.src }}" alt="{{ p.mark.code }}" style="display:block;width:16px;height:16px;flex:0 0 16px" /></sc-if>
+                    <span>{{ p.club }}</span>
+                  </span>
+                </td>
+                <td style="padding:5px 6px;border-bottom:1px solid #e2ddcd;text-align:center;font-size:8.5px;font-weight:800;letter-spacing:0.06em;color:#8a877c">{{ p.position }}</td>
+                <td style="padding:5px 6px;border-bottom:1px solid #e2ddcd;text-align:right;font-size:11px;font-weight:800;color:#c8202e;font-variant-numeric:tabular-nums">{{ p.priceLabel }}</td>
+                <td style="padding:5px 6px;border-bottom:1px solid #e2ddcd;text-align:right;font-size:10.5px;font-weight:600;color:#16161a;font-variant-numeric:tabular-nums">{{ p.totalPoints }}</td>
+                <td style="padding:5px 6px;border-bottom:1px solid #e2ddcd;text-align:right;font-size:10.5px;font-weight:600;color:#4a4a4d;font-variant-numeric:tabular-nums">{{ p.valueLabel }}</td>
+                <td style="padding:5px 0;border-bottom:1px solid #e2ddcd;text-align:right;font-size:10.5px;font-weight:600;color:#4a4a4d;font-variant-numeric:tabular-nums">{{ p.selLabel }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid #16161a;padding-top:10px;margin-top:2px">
+          <span style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#8a877c">{{ rangeLabel }}</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button type="button" onClick="{{ onPrevPage }}" style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border:1px solid {{ prevStyle.border }};background:{{ prevStyle.bg }};color:{{ prevStyle.fg }};cursor:pointer">Prev</button>
+            <span style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#16161a;min-width:86px;text-align:center">{{ pageLabel }}</span>
+            <button type="button" onClick="{{ onNextPage }}" style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border:1px solid {{ nextStyle.border }};background:{{ nextStyle.bg }};color:{{ nextStyle.fg }};cursor:pointer">Next</button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-top:14px">
+          <p style="font-family:Archivo,sans-serif;font-size:11px;line-height:1.5;color:#7a7870;margin:0;max-width:38em">Prices are UEFA's own game-design numbers, adjusted after selected matchdays. Use them as a value denominator (points per €m), not as a strength input &mdash; strength comes from the market line and Elo. Source: {{ playerSource }}</p>
+          <button type="button" onClick="{{ onRefreshFeed }}" style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:6px 12px;border:1px solid #d8d3c3;background:transparent;color:#4a4a4d;cursor:pointer;white-space:nowrap">Refresh</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noPlayers }}" hint-placeholder-val="{{ true }}">
+        <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 10px;max-width:38em">The page tries three routes on load: a local <span style="font-family:ui-monospace,Menlo,monospace;font-size:12.5px">data/ucl-fantasy-players.json</span>, the UEFA feed direct, then a public CORS proxy. Browsers block the cross-origin call, so in practice the local file or the paste box below is the working path. Either one is cached locally and persists across reloads.</p>
+        <div style="display:flex;align-items:center;gap:14px;margin:0 0 18px">
+          <button type="button" onClick="{{ onRefreshFeed }}" style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;border:1px solid #16161a;background:transparent;color:#16161a;cursor:pointer;white-space:nowrap">Retry fetch</button>
+          <span style="font-family:Archivo,sans-serif;font-size:12px;font-weight:700;line-height:1.4;color:#c8202e">{{ feedMessage }}</span>
+        </div>
+        <div style="background:#16161a;padding:20px 22px;margin-bottom:18px">
+          <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#e0928c;margin-bottom:9px">Run this in a console on gaming.uefa.com</div>
+          <div style="font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.75;color:#f4f1e6;word-break:break-all">fetch('/en/uclfantasy/services/api/Feed/players?gamedayId=1&amp;language=en')<br />&nbsp;&nbsp;.then(r =&gt; r.json()).then(j =&gt; copy(JSON.stringify(j)))</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px">
+          <textarea placeholder="Paste the feed JSON here" onChange="{{ onPasteFeed }}" style="width:100%;min-height:120px;font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.5;padding:11px 13px;border:1px solid #d8d3c3;background:#fffdf7;color:#16161a;resize:vertical"></textarea>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button type="button" onClick="{{ onLoadFeed }}" style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;border:none;background:#16161a;color:#f4f1e6;cursor:pointer">Load prices</button>
+            <span style="font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;color:#c8202e">{{ pasteMessage }}</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;border-top:1px solid #d8d3c3;padding-top:18px">
+          <div>
+            <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;margin-bottom:8px">The endpoint</div>
+            <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d">GET <span style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px">gaming.uefa.com/en/uclfantasy/services/api/Feed/players?gamedayId=1&amp;language=en</span>. Returns <span style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px">data.value.playerList</span> &mdash; every player with price, position, club code, points and selection percentage.</div>
+          </div>
+          <div>
+            <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;margin-bottom:8px">Caveats</div>
+            <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d">Undocumented and unversioned: field names and paths change between seasons, and some gamedays require a logged-in session. Fine for a personal model, not for anything you ship. Parsing lives in <span style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px">lib/fantasy-players.js</span>.</div>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ onModel }}" hint-placeholder-val="{{ false }}">
+<section class="kept" style="margin-bottom:38px">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:16px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">01</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;letter-spacing:0.005em;text-transform:uppercase;color:#16161a;margin:0">Define two targets, not one</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:16px">
+      <div style="background:#fffdf7;border-top:3px solid #16161a;padding:14px 16px 16px">
+        <div style="font-family:Archivo,sans-serif;font-size:19px;font-weight:800;color:#16161a;margin-bottom:6px">&lambda; against</div>
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d">Expected goals conceded. Drives defensive difficulty and clean&#8209;sheet probability.</div>
+      </div>
+      <div style="background:#fffdf7;border-top:3px solid #c8202e;padding:14px 16px 16px">
+        <div style="font-family:Archivo,sans-serif;font-size:19px;font-weight:800;color:#16161a;margin-bottom:6px">&lambda; for</div>
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d">Expected goals scored. Drives attacking difficulty.</div>
+      </div>
+    </div>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0;max-width:38em">A fixture can be easy for your forwards and hard for your defenders. A single number cannot say so, which makes the split the model's most important structural choice. For player&#8209;level returns, add a third layer: minutes probability &times; share of team output.</p>
+  </section>
+
+  <section class="kept" style="margin-bottom:38px">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:16px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">02</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">The core equation</h2>
+    </div>
+    <div style="background:#16161a;padding:24px 26px;margin-bottom:14px">
+      <div style="font-family:Archivo,sans-serif;font-size:15px;font-weight:500;line-height:2.1;color:#f4f1e6;font-variant-numeric:tabular-nums">
+        log &lambda;<sub>for</sub> &nbsp;&nbsp;= &nbsp;&mu; + ATT<sub>team</sub> &minus; DEF<sub>opp</sub> + h&middot;home + &Sigma; &beta;<sub>i</sub>&middot;ctx<sub>i</sub><br />
+        log &lambda;<sub>agst</sub> = &nbsp;&mu; + ATT<sub>opp</sub> &minus; DEF<sub>team</sub> &minus; h&middot;home + &Sigma; &gamma;<sub>i</sub>&middot;ctx<sub>i</sub>
+      </div>
+    </div>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0;max-width:38em">&mu; is the competition baseline goal rate. Fit &beta; and &gamma; on historical Champions League matches by maximum likelihood, with a low&#8209;score correlation correction. No hand&#8209;picked percentage weights anywhere in the model.</p>
+  </section>
+
+  <section style="margin-bottom:38px">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">03</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">Team ratings</h2>
+    </div>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 18px;max-width:38em">Blend by inverse&#8209;variance weighting, not fixed shares. The market gets more weight as kickoff approaches; coefficient and Elo carry the early load.</p>
+    <table style="width:100%;border-collapse:collapse;font-family:Archivo,sans-serif;font-size:13px">
+      <thead>
+        <tr>
+          <th style="text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;padding:0 14px 6px 0;border-bottom:1px solid #16161a;width:27%">Source</th>
+          <th style="text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;padding:0 14px 6px 0;border-bottom:1px solid #16161a">Treatment</th>
+          <th style="text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;padding:0 0 6px 0;border-bottom:1px solid #16161a;width:21%">Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Market&#8209;implied strength</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">De&#8209;vigged 1X2 and Asian handicap lines, converted to a goal&#8209;expectation prior</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Sharpest single input</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Club Elo</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Cross&#8209;league comparable; no adjustment needed</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Stable backbone</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Domestic xG for / against</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Opponent&#8209;adjusted, scaled by league strength, exponential decay (half&#8209;life &asymp;10 matches)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Recent form signal</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">UEFA coefficient / pot</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Shrinkage prior; weight decays as match data accumulates</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Early&#8209;season anchor</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Squad availability</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Suspensions and registration omissions applied as a rating delta, not a separate term</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Match&#8209;level correction</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section style="margin-bottom:38px">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">04</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">Context terms</h2>
+    </div>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 18px;max-width:38em">Fitted, small, additive in log space. These are the genuinely competition&#8209;specific terms. Expected magnitudes are sanity checks on the fit, not inputs.</p>
+    <table style="width:100%;border-collapse:collapse;font-family:Archivo,sans-serif;font-size:13px">
+      <thead>
+        <tr>
+          <th style="text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;padding:0 14px 6px 0;border-bottom:1px solid #16161a;width:24%">Term</th>
+          <th style="text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;padding:0 14px 6px 0;border-bottom:1px solid #16161a">Encoding</th>
+          <th style="text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;padding:0 0 6px 0;border-bottom:1px solid #16161a;width:24%">Expected size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Venue</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Binary home indicator</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">&asymp;0.30&ndash;0.35 goals total</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Rest and congestion</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Days since last match, days to next domestic match &mdash; the sandwich effect lives here</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Small; raises rotation risk more than &lambda;</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Travel</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Great&#8209;circle distance + time&#8209;zone delta, one term</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Marginal</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Stakes</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Matchday index, plus the qualification&#8209;probability swing the result creates for each side. Replaces vague &ldquo;motivation&rdquo;</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Material at MD6&ndash;8</td>
+        </tr>
+        <tr style="break-inside:avoid">
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#16161a;font-weight:700">Two&#8209;leg state</td>
+          <td style="padding:10px 14px 10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Leg number and aggregate score state</td>
+          <td style="padding:10px 0;border-bottom:1px solid #d8d3c3;color:#4a4a4d;line-height:1.4">Large in settled second legs</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-family:Archivo,sans-serif;font-size:12.5px;line-height:1.5;color:#7a7870;margin:14px 0 0;max-width:38em">Style variables &mdash; pressing intensity, set&#8209;piece xG share, possession differential &mdash; shift variance more than expectation. Model them on the dispersion parameter, not on &lambda;.</p>
+  </section>
+
+  <section style="margin-bottom:38px;break-before:page">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">05</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">From <span style="text-transform:none">&lambda;</span> to a rating</h2>
+    </div>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 20px;max-width:38em">Rank &lambda;<sub>against</sub> across all league&#8209;phase fixtures, take the percentile, map to buckets. Repeat separately for &lambda;<sub>for</sub>. The bucket is for reading at a glance; the underlying number and its interval are what you act on.</p>
+    <div style="display:flex;gap:4px;margin-bottom:9px">
+      <sc-for list="{{ ramp }}" as="b" hint-placeholder-count="5">
+        <div style="flex:1;padding:18px 0 17px;text-align:center;background:{{ b.bg }};color:{{ b.fg }};font-family:Archivo,sans-serif;font-size:20px;font-weight:900">{{ b.label }}</div>
+      </sc-for>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-family:Archivo,sans-serif;font-size:8.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;margin-bottom:22px">
+      <span>Easiest decile</span>
+      <span>Hardest decile</span>
+    </div>
+    <div style="background:#fffdf7;border-left:4px solid #c8202e;padding:16px 20px">
+      <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e;margin-bottom:6px">Always ship the interval</div>
+      <p style="font-family:Archivo,sans-serif;font-size:14px;line-height:1.5;color:#2b2b2e;margin:0;max-width:38em">Two fixtures with the same mean difficulty and different predictive spread are not the same fixture. For one&#8209;off differentials the spread is the entire decision.</p>
+    </div>
+  </section>
+
+  <sc-if value="{{ showWorkedExample }}" hint-placeholder-val="{{ true }}">
+    <section style="margin-bottom:38px">
+      <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+        <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">06</span>
+        <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">Worked example</h2>
+      </div>
+      <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 20px;max-width:38em">A strong side away at a mid&#8209;pot host, matchday 1. Coefficients below are illustrative placeholders showing the shape of the decomposition, not fitted output.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+        <div>
+          <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;border-bottom:2px solid #16161a;padding-bottom:6px;margin-bottom:2px">log &lambda; for</div>
+          <table style="width:100%;border-collapse:collapse;font-family:Archivo,sans-serif;font-size:12.5px;font-variant-numeric:tabular-nums">
+            <tbody>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Baseline &mu;</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">+0.300</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">ATT team</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">+0.305</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">DEF opponent</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">&minus;0.140</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Venue (away)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">&minus;0.140</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Rest (+2 days)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">+0.020</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Travel 1,880&nbsp;km</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">&minus;0.015</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Stakes (MD1)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.000</td></tr>
+              <tr><td style="padding:11px 0 0;color:#16161a;font-weight:800;text-transform:uppercase;font-size:11px;letter-spacing:0.08em">&lambda; for</td><td style="padding:11px 0 0;text-align:right;color:#c8202e;font-weight:900;font-size:19px">1.39</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;border-bottom:2px solid #16161a;padding-bottom:6px;margin-bottom:2px">log &lambda; against</div>
+          <table style="width:100%;border-collapse:collapse;font-family:Archivo,sans-serif;font-size:12.5px;font-variant-numeric:tabular-nums">
+            <tbody>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Baseline &mu;</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">+0.300</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">ATT opponent</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">+0.120</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">DEF team</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">&minus;0.210</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Venue (opp. home)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">+0.140</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Rest / travel</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">&minus;0.005</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Stakes (MD1)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.000</td></tr>
+              <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#c4bfb0">&mdash;</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#c4bfb0">&mdash;</td></tr>
+              <tr><td style="padding:11px 0 0;color:#16161a;font-weight:800;text-transform:uppercase;font-size:11px;letter-spacing:0.08em">&lambda; against</td><td style="padding:11px 0 0;text-align:right;color:#c8202e;font-weight:900;font-size:19px">1.41</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p style="font-family:Archivo,sans-serif;font-size:13.5px;line-height:1.5;color:#4a4a4d;margin:20px 0 0;max-width:38em">Both sit near the competition median, so attacking and defensive ratings land mid&#8209;scale &mdash; but with a wide interval (&plusmn;0.22 on &lambda;), driven by the opponent's high&#8209;variance pressing profile. A same&#8209;mean fixture against a possession&#8209;control side would carry roughly half the spread and be the safer differential.</p>
+    </section>
+  </sc-if>
+
+  <section class="kept" style="margin-bottom:38px">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">07</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">Validation</h2>
+    </div>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 12px;max-width:38em">Score with log&#8209;loss and Brier on match outcomes and clean sheets, out of sample, against the market closing line and an Elo&#8209;only model. Check calibration by decile, not just aggregate error.</p>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0;max-width:38em">If a term does not beat the market benchmark on its own increment, it is not earning its place. Cut it.</p>
+  </section>
+
+<section style="margin-bottom:38px;break-before:page">
+    <div style="display:flex;gap:12px;align-items:baseline;border-bottom:1px solid #16161a;padding-bottom:7px;margin-bottom:14px">
+      <span style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.16em;color:#c8202e">08</span>
+      <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">Market data &rarr; <span style="text-transform:none">&lambda;</span></h2>
+    </div>
+    <p style="font-family:Archivo,sans-serif;font-size:14.5px;line-height:1.55;color:#2b2b2e;margin:0 0 20px;max-width:38em">Odds don't give you goals. Two steps get you there: strip the bookmaker's margin to recover true probabilities, then solve for the &lambda; pair whose Poisson score distribution reproduces them. The totals line pins the sum; the 1X2 pins the split.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:22px">
+      <div style="background:#fffdf7;padding:14px 16px 16px;border-top:3px solid #16161a">
+        <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e;margin-bottom:7px">Step 1 &mdash; De&#8209;vig</div>
+        <div style="font-family:Archivo,sans-serif;font-size:12.5px;line-height:1.45;color:#4a4a4d">Invert each decimal price, then rescale so the book sums to 1. Power method (p&#8202;=&#8202;raw<sup>k</sup>) rather than proportional &mdash; it treats longshots better, which matters in a competition containing both Bayern and Sabah.</div>
+      </div>
+      <div style="background:#fffdf7;padding:14px 16px 16px;border-top:3px solid #16161a">
+        <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e;margin-bottom:7px">Step 2 &mdash; Solve the total</div>
+        <div style="font-family:Archivo,sans-serif;font-size:12.5px;line-height:1.45;color:#4a4a4d">Find &Lambda;&#8202;=&#8202;&lambda;<sub>h</sub>&#8202;+&#8202;&lambda;<sub>a</sub> such that a Poisson with mean &Lambda; reproduces the de&#8209;vigged over probability at the quoted line.</div>
+      </div>
+      <div style="background:#fffdf7;padding:14px 16px 16px;border-top:3px solid #c8202e">
+        <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e;margin-bottom:7px">Step 3 &mdash; Solve the split</div>
+        <div style="font-family:Archivo,sans-serif;font-size:12.5px;line-height:1.45;color:#4a4a4d">Hold &Lambda; fixed and bisect the home share until independent Poisson marginals reproduce the de&#8209;vigged home&#8209;win probability. An Asian handicap line, where quoted, pins the same split more precisely.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:20px">
+      <div>
+        <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;border-bottom:2px solid #16161a;padding-bottom:6px;margin-bottom:2px">Worked &mdash; Real Madrid v Inter, MD1</div>
+        <table style="width:100%;border-collapse:collapse;font-family:Archivo,sans-serif;font-size:12.5px;font-variant-numeric:tabular-nums">
+          <tbody>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Prices 1 / X / 2</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">2.05 &nbsp;3.50 &nbsp;3.60</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Overround</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">5.1%</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">De&#8209;vigged home win (k&#8202;=&#8202;1.05)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.471</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Over 2.5 &mdash; 1.90 / 1.95</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.507</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Implied total &Lambda;</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">2.70</td></tr>
+            <tr><td style="padding:11px 0 0;color:#16161a;font-weight:800;text-transform:uppercase;font-size:11px;letter-spacing:0.08em">&lambda; home / away</td><td style="padding:11px 0 0;text-align:right;color:#c8202e;font-weight:900;font-size:19px">1.57 / 1.13</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;border-bottom:2px solid #16161a;padding-bottom:6px;margin-bottom:2px">Full solve output</div>
+        <table style="width:100%;border-collapse:collapse;font-family:Archivo,sans-serif;font-size:12.5px;font-variant-numeric:tabular-nums">
+          <tbody>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">P(home win)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.471</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">P(draw)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.267</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">P(away win)</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.262</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Supremacy &lambda;<sub>h</sub>&#8202;&minus;&#8202;&lambda;<sub>a</sub></td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">+0.44</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Clean sheet, home</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.32</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;color:#4a4a4d">Clean sheet, away</td><td style="padding:8px 0;border-bottom:1px solid #e2ddcd;text-align:right;color:#16161a;font-weight:600">0.21</td></tr>
+            <tr><td style="padding:11px 0 0;color:#4a4a4d;font-size:11.5px;line-height:1.4">One de&#8209;vigged price set yields the whole distribution, and with it the uncertainty band the projections on the Fixture&#8209;difficulty tab do not carry.</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="background:#fffdf7;border-left:4px solid #c8202e;padding:16px 20px;margin-bottom:18px">
+      <div style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e;margin-bottom:6px">Example prices, not a live feed</div>
+      <p style="font-family:Archivo,sans-serif;font-size:14px;line-height:1.5;color:#2b2b2e;margin:0;max-width:38em">Match markets for the 2026/27 league phase are not yet published &mdash; only outright tournament prices. The prices above are illustrative. The solver is live: drop closing odds into <code style="font-size:12.5px">data/ucl&#8209;odds&#8209;md1.json</code> and <code style="font-size:12.5px">lib/market&#8209;lambda.js</code> returns &lambda; for every fixture in the file.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
+      <div>
+        <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;margin-bottom:8px">Where the market leads</div>
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d">The closing line is the sharpest public forecast of a football match. It already prices squad news, motivation, rest and crowd &mdash; every factor a hand&#8209;weighted model tries to add by hand, and prices them better.</div>
+      </div>
+      <div>
+        <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a;margin-bottom:8px">Where it can't help</div>
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d">Prices only exist near kickoff, so matchday&#8209;6 planning in September still needs Elo and coefficient. Liquidity thins on the small fixtures, exactly where help is most needed. And a market&#8209;only model can never beat the market &mdash; the edge lives in the Elo and xG terms.</div>
+      </div>
+    </div>
+  </section>
+
+<sc-if value="{{ showExclusions }}" hint-placeholder-val="{{ true }}">
+    <section class="kept" style="border-top:2px solid #16161a;padding-top:20px">
+      <div style="font-family:Archivo,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#c8202e;margin-bottom:16px">Deliberately excluded</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 28px">
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d"><strong style="color:#16161a;font-weight:800;display:block;text-transform:uppercase;font-size:10.5px;letter-spacing:0.06em;margin-bottom:4px">Hand&#8209;set percentage weights</strong>False precision. Either fit them or state them as additive deltas &mdash; never both.</div>
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d"><strong style="color:#16161a;font-weight:800;display:block;text-transform:uppercase;font-size:10.5px;letter-spacing:0.06em;margin-bottom:4px">Hostile&#8209;atmosphere penalties</strong>Subjective, and already priced into Elo and the market line.</div>
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d"><strong style="color:#16161a;font-weight:800;display:block;text-transform:uppercase;font-size:10.5px;letter-spacing:0.06em;margin-bottom:4px">Altitude as its own term</strong>An edge case in this competition; folded into travel if kept at all.</div>
+        <div style="font-family:Archivo,sans-serif;font-size:13px;line-height:1.45;color:#4a4a4d"><strong style="color:#16161a;font-weight:800;display:block;text-transform:uppercase;font-size:10.5px;letter-spacing:0.06em;margin-bottom:4px">Any single&#8209;number rating</strong>Without the attack/defence split it cannot answer the question people ask of it.</div>
+      </div>
+    </section>
+  </sc-if>
+  </sc-if>
+  </div>
+</doc-page>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;fantasyGameday&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:13,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Player prices&quot;},&quot;spanFrom&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:8,&quot;step&quot;:1,&quot;unit&quot;:&quot;MD&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;spanTo&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:8,&quot;min&quot;:1,&quot;max&quot;:8,&quot;step&quot;:1,&quot;unit&quot;:&quot;MD&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;gridSort&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Easiest first&quot;,&quot;Hardest first&quot;,&quot;Alphabetical&quot;],&quot;default&quot;:&quot;Easiest first&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;scalePoints&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[3,5,10],&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Rating scale&quot;},&quot;showWorkedExample&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;},&quot;showExclusions&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
+class Component extends DCLogic {
+  state = {
+    grid: null, legend: null, from: null, to: null, sort: null, tab: 'ratings',
+    players: null, playerSource: '', pasted: '', feedMessage: '',
+    pos: 'All', playerSort: 'Price', limit: 20, club: 'All', pageIndex: 0,
+    metric: 'Attack'
+  };
+
+  componentDidMount() {
+    import('./lib/fdr-grid.js').then(m => {
+      this.grid = m;
+      this.setState({ grid: m.buildGrid(this.spanFrom, this.spanTo, this.sortMode, this.metric), legend: m.legend });
+    });
+    import('./lib/fantasy-players.js').then(m => {
+      this.fantasy = m;
+      this.autoLoad(m);
+    });
+  }
+
+  async autoLoad(m) {
+    this.setState({ feedMessage: 'Fetching prices\u2026' });
+    const gameday = parseInt(this.props.fantasyGameday ?? 1, 10);
+    const feed = 'https://gaming.uefa.com/en/uclfantasy/services/api/Feed/players?gamedayId=' + gameday + '&language=en';
+    const attempts = [
+      ['UEFA Fantasy feed, gameday 1, captured 31 Aug 2026', './data/ucl-fantasy-players-normalised.json'],
+      ['UEFA Fantasy feed (raw capture)', './data/ucl-fantasy-players.json'],
+      ['UEFA feed, live', feed]
+    ];
+    for (const [label, url] of attempts) {
+      try {
+        const ctl = new AbortController();
+        const timer = setTimeout(() => ctl.abort(), 4000);
+        const res = await fetch(url, { headers: { accept: 'application/json' }, signal: ctl.signal });
+        clearTimeout(timer);
+        if (!res.ok) continue;
+        const players = m.normalise(JSON.parse(await res.text()));
+        if (!players.length) continue;
+        const source = label === 'UEFA feed, live'
+          ? label + ', gameday ' + gameday + ', ' + new Date().toISOString().slice(0, 10)
+          : label;
+        try { localStorage.setItem('uclFantasyPlayers', JSON.stringify({ players, source })); } catch (e) {}
+        this.setState({ players, playerSource: source, feedMessage: '' });
+        return;
+      } catch (e) { /* try the next route */ }
+    }
+    this.setState({ feedMessage: 'No route reached the feed \u2014 the browser blocks the cross-origin call. Paste it below, or drop the JSON at data/ucl-fantasy-players.json.' });
+  }
+
+  refresh() {
+    try { localStorage.removeItem('uclFantasyPlayers'); } catch (e) {}
+    this.setState({ players: null, playerSource: '' }, () => {
+      if (this.fantasy) this.autoLoad(this.fantasy);
+    });
+  }
+
+  loadFeed() {
+    if (!this.fantasy) return;
+    const raw = (this.state.pasted || '').trim();
+    if (!raw) { this.setState({ pasteMessage: 'Nothing pasted yet.' }); return; }
+    let parsed;
+    try { parsed = JSON.parse(raw); } catch (e) { this.setState({ pasteMessage: 'That is not valid JSON.' }); return; }
+    const players = this.fantasy.normalise(parsed);
+    if (!players.length) { this.setState({ pasteMessage: 'No playerList found in that JSON.' }); return; }
+    const source = 'pasted feed, ' + new Date().toISOString().slice(0, 10);
+    try { localStorage.setItem('uclFantasyPlayers', JSON.stringify({ players, source })); } catch (e) {}
+    this.setState({ players, playerSource: source, feedMessage: '', pasteMessage: '' });
+  }
+
+  componentDidUpdate(prev) {
+    if (!this.grid) return;
+    if (prev.spanFrom !== this.props.spanFrom || prev.spanTo !== this.props.spanTo || prev.gridSort !== this.props.gridSort) {
+      this.setState({ from: null, to: null, sort: null }, () => this.rebuild());
+    }
+  }
+
+  rebuild() {
+    this.setState({ grid: this.grid.buildGrid(this.spanFrom, this.spanTo, this.sortMode, this.metric) });
+  }
+
+  setMetric(metric) {
+    this.setState({ metric }, () => this.rebuild());
+  }
+
+  get metric() { return this.state.metric ?? 'Attack'; }
+
+  setSpan(from, to) {
+    let lo = from ?? this.spanFrom, hi = to ?? this.spanTo;
+    if (from !== null && from !== undefined && from > hi) hi = from;
+    if (to !== null && to !== undefined && to < lo) lo = to;
+    this.setState({ from: lo, to: hi }, () => this.rebuild());
+  }
+
+  setSort(mode) {
+    this.setState({ sort: mode }, () => this.rebuild());
+  }
+
+  get spanFrom() { return this.state.from ?? parseInt(this.props.spanFrom ?? 1, 10); }
+  get spanTo() { return this.state.to ?? parseInt(this.props.spanTo ?? 8, 10); }
+  get sortMode() { return this.state.sort ?? this.props.gridSort ?? 'Easiest first'; }
+
+  chip(active, disabled) {
+    if (disabled) return { bg: 'transparent', fg: '#c2beb2', border: '#e2ddcd' };
+    return active
+      ? { bg: '#16161a', fg: '#f4f1e6', border: '#16161a' }
+      : { bg: 'transparent', fg: '#4a4a4d', border: '#d8d3c3' };
+  }
+
+  projectionStats() {
+    if (!this.grid) return [];
+    const teams = this.grid.TEAMS;
+    const tot = teams.map(([name, mds]) => ({
+      name,
+      gf: mds.reduce((a, c) => a + c[2], 0),
+      ga: mds.reduce((a, c) => a + c[3], 0)
+    }));
+    const bestGf = tot.slice().sort((a, b) => b.gf - a.gf)[0];
+    const bestGa = tot.slice().sort((a, b) => a.ga - b.ga)[0];
+    const worstGa = tot.slice().sort((a, b) => b.ga - a.ga)[0];
+    const all = teams.flatMap(([, mds]) => mds.map(c => c[2]));
+    const mean = all.reduce((a, b) => a + b, 0) / all.length;
+    return [
+      { label: 'Most projected goals', value: bestGf.gf.toFixed(2), detail: bestGf.name, rule: '#1d4d33' },
+      { label: 'Fewest conceded', value: bestGa.ga.toFixed(2), detail: bestGa.name, rule: '#1d4d33' },
+      { label: 'Most conceded', value: worstGa.ga.toFixed(2), detail: worstGa.name, rule: '#a01722' },
+      { label: 'Mean per team-match', value: mean.toFixed(2), detail: '288 team-matches', rule: '#16161a' }
+    ];
+  }
+
+  playerStats() {
+    if (!this.fantasy || !this.state.players) return [];
+    const s = this.fantasy.summarise(this.state.players);
+    if (!s) return [];
+    return [
+      { label: 'Players', value: String(s.count) },
+      { label: 'Clubs', value: String(s.clubs) },
+      { label: 'Most expensive', value: '\u20ac' + s.maxPrice + 'm' },
+      { label: 'Cheapest', value: '\u20ac' + s.minPrice + 'm' },
+      { label: 'Mean price', value: '\u20ac' + s.meanPrice + 'm' }
+    ];
+  }
+
+  playerPage() {
+    if (!this.fantasy || !this.state.players) return { rows: [], total: 0, pageCount: 1, pageIndex: 0, from: 0, to: 0 };
+    return this.fantasy.page(this.state.players, {
+      position: this.state.pos,
+      club: this.state.club,
+      sort: this.state.playerSort,
+      perPage: this.state.limit,
+      pageIndex: this.state.pageIndex
+    });
+  }
+
+  formatRows(rows) {
+    return rows.map(p => ({
+      ...p,
+      priceLabel: '\u20ac' + p.price.toFixed(1) + 'm',
+      valueLabel: p.price > 0 ? (p.totalPoints / p.price).toFixed(1) : '\u2014',
+      selLabel: p.selectedPct === null ? '\u2014' : p.selectedPct.toFixed(1) + '%'
+    }));
+  }
+
+  setFilter(patch) {
+    this.setState(Object.assign({ pageIndex: 0 }, patch));
+  }
+
+  turnPage(delta) {
+    const { pageCount, pageIndex } = this.playerPage();
+    const next = Math.min(Math.max(0, pageIndex + delta), pageCount - 1);
+    if (next !== pageIndex) this.setState({ pageIndex: next });
+  }
+
+  renderVals() {
+    const pg = this.playerPage();
+    const n = parseInt(this.props.scalePoints ?? 5, 10);
+    const stops = [[55, 90, 30], [34, 240, 127], [238, 240, 242], [244, 35, 79], [142, 18, 48]];
+    const lerp = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+    const ramp = Array.from({ length: n }, (_, i) => {
+      const t = n === 1 ? 0 : i / (n - 1);
+      const p = t * (stops.length - 1);
+      const lo = Math.min(Math.floor(p), stops.length - 2);
+      const c = lerp(stops[lo], stops[lo + 1], p - lo);
+      const lum = (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) / 255;
+      return {
+        label: String(i + 1),
+        bg: `rgb(${c[0]},${c[1]},${c[2]})`,
+        fg: lum > 0.6 ? '#3b1d54' : '#ffffff'
+      };
+    });
+    return {
+      ramp,
+      gridRows: this.state.grid || [],
+      legend: this.state.legend || [],
+      onRatings: this.state.tab === 'ratings',
+      onPlayers: this.state.tab === 'players',
+      onModel: this.state.tab === 'model',
+      hasPlayers: !!(this.state.players && this.state.players.length),
+      noPlayers: !(this.state.players && this.state.players.length),
+      playerSource: this.state.playerSource || '—',
+      feedMessage: this.state.feedMessage,
+      pasteMessage: this.state.pasteMessage || '',
+      playerLimit: this.state.limit,
+      playerStats: this.playerStats(),
+      playerRows: this.formatRows(pg.rows),
+      pageLabel: 'Page ' + (pg.pageIndex + 1) + ' of ' + pg.pageCount,
+      rangeLabel: pg.total ? pg.from + '\u2013' + pg.to + ' of ' + pg.total : 'No players match',
+      onPrevPage: () => this.turnPage(-1),
+      onNextPage: () => this.turnPage(1),
+      prevStyle: this.chip(false, pg.pageIndex === 0),
+      nextStyle: this.chip(false, pg.pageIndex >= pg.pageCount - 1),
+      clubOptions: (this.fantasy && this.state.players ? this.fantasy.clubList(this.state.players) : ['All'])
+        .map(c => ({ label: c === 'All' ? 'All clubs' : c, value: c })),
+      clubValue: this.state.club,
+      onClubChange: e => this.setFilter({ club: e.target.value }),
+      positionButtons: ['All', 'GK', 'DEF', 'MID', 'FWD'].map(p => ({
+        label: p,
+        onClick: () => this.setFilter({ pos: p }),
+        ...this.chip(p === this.state.pos)
+      })),
+      playerSortButtons: ['Price', 'Points', 'Points per €m', 'Club', 'Name'].map(s => ({
+        label: s === 'Points per €m' ? 'Pts/€m' : s,
+        onClick: () => this.setFilter({ playerSort: s }),
+        ...this.chip(s === this.state.playerSort)
+      })),
+      onLimitChange: e => this.setFilter({ limit: parseInt(e.target.value, 10) }),
+      onPasteFeed: e => this.setState({ pasted: e.target.value }),
+      onLoadFeed: () => this.loadFeed(),
+      onRefreshFeed: () => this.refresh(),
+      tabs: [['ratings', 'Fixture difficulty'], ['players', 'Player prices'], ['model', 'The model explained']].map(([id, label]) => ({
+        label,
+        onClick: () => this.setState({ tab: id }),
+        bg: this.state.tab === id ? '#16161a' : 'transparent',
+        fg: this.state.tab === id ? '#f4f1e6' : '#8a877c'
+      })),
+      mdHeads: Array.from({ length: 8 }, (_, i) => ({
+        label: 'MD' + (i + 1),
+        color: (i + 1 >= this.spanFrom && i + 1 <= this.spanTo) ? '#c8202e' : '#c2beb2'
+      })),
+      spanLabel: this.spanFrom === this.spanTo ? ('MD' + this.spanFrom) : ('MD' + this.spanFrom + '\u2013' + this.spanTo),
+      sortLabel: this.sortMode === 'Alphabetical' ? 'Alphabetical' : 'Sorted by span \u2014 ' + this.sortMode.toLowerCase(),
+      projectionStats: this.projectionStats(),
+      metricButtons: [
+        ['Attack', 'Attack (goals scored)'],
+        ['Defence', 'Defence (goals against)'],
+        ['Combined', 'Combined (goal difference)']
+      ].map(([m, label]) => ({
+        label,
+        onClick: () => this.setMetric(m),
+        ...this.chip(m === this.metric)
+      })),
+      metricLabel: this.metric === 'Attack' ? 'Projected goals scored'
+        : this.metric === 'Defence' ? 'Projected goals against'
+        : 'Projected goal difference',
+      metricNote: this.metric === 'Attack'
+        ? 'Cells carry each team\u2019s projected goals for. Difficulty rises as that figure falls \u2014 this is the view for picking attackers.'
+        : this.metric === 'Defence'
+        ? 'Cells carry each team\u2019s projected goals against. Difficulty rises as that figure rises \u2014 this is the view for defenders and goalkeepers.'
+        : 'Cells carry projected goal difference, goals for minus goals against. A single ordering when you want one number rather than the split.',
+      spanFrom: this.spanFrom,
+      spanTo: this.spanTo,
+      onFromChange: e => this.setSpan(parseInt(e.target.value, 10), null),
+      onToChange: e => this.setSpan(null, parseInt(e.target.value, 10)),
+      sortButtons: ['Easiest first', 'Hardest first', 'Alphabetical'].map(m => ({
+        label: m === 'Alphabetical' ? 'A\u2013Z' : m.replace(' first', ''),
+        onClick: () => this.setSort(m),
+        ...this.chip(m === this.sortMode)
+      })),
+      showWorkedExample: this.props.showWorkedExample ?? true,
+      showExclusions: this.props.showExclusions ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>
