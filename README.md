@@ -18,7 +18,6 @@ treats as Jekyll internals.
 | --- | --- |
 | `index.html` | The page. Three tabs: fixture difficulty, player prices, the model. |
 | `support.js` | Component runtime. Must sit beside `index.html`. |
-| `doc-page.js` | Paged-document shell (print layout). |
 | `lib/fdr-grid.js` | Difficulty grid: projections, quintile scaling, span sorting. |
 | `lib/fantasy-players.js` | Fantasy feed parsing, kit marks, filtering and paging. |
 | `lib/market-lambda.js` | De-vig and Poisson solver for market-implied goal expectations. |
