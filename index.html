@@ -41,23 +41,14 @@
       <h2 style="font-family:Archivo,sans-serif;font-weight:800;font-size:18px;line-height:1.15;text-transform:uppercase;color:#16161a;margin:0">Fixture difficulty &mdash; projected goals</h2>
     </div>
     <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;background:#fffdf7;padding:12px clamp(10px,3vw,16px);margin-bottom:12px">
-      <div style="display:flex;flex-wrap:nowrap;align-items:center;gap:14px">
-      <div style="display:flex;align-items:center;gap:9px">
-        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;white-space:nowrap">From</span>
-        <select value="{{ spanFrom }}" onChange="{{ onFromChange }}" style="font-family:Archivo,sans-serif;font-size:10px;font-weight:700;padding:4px 6px;border:1px solid #d8d3c3;background:#f4f1e6;color:#16161a;cursor:pointer">
-          <sc-for list="{{ matchdayOptions }}" as="o" hint-placeholder-count="8">
-            <option value="{{ o.value }}">{{ o.label }}</option>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;white-space:nowrap">Matchdays</span>
+        <div style="display:flex;gap:2px">
+          <sc-for list="{{ dayButtons }}" as="d" hint-placeholder-count="8">
+            <button type="button" onClick="{{ d.onClick }}" style="font-family:Archivo,sans-serif;font-size:10px;font-weight:800;min-width:24px;padding:4px 5px;border:1px solid {{ d.border }};background:{{ d.bg }};color:{{ d.fg }};cursor:pointer">{{ d.label }}</button>
           </sc-for>
-        </select>
         </div>
-      <div style="display:flex;align-items:center;gap:9px">
-        <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;white-space:nowrap">To</span>
-        <select value="{{ spanTo }}" onChange="{{ onToChange }}" style="font-family:Archivo,sans-serif;font-size:10px;font-weight:700;padding:4px 6px;border:1px solid #d8d3c3;background:#f4f1e6;color:#16161a;cursor:pointer">
-          <sc-for list="{{ matchdayOptions }}" as="o" hint-placeholder-count="8">
-            <option value="{{ o.value }}">{{ o.label }}</option>
-          </sc-for>
-        </select>
-        </div>
+        <button type="button" onClick="{{ onAllDays }}" style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:4px 8px;border:1px solid #d8d3c3;background:transparent;color:#4a4a4d;cursor:pointer">All</button>
       </div>
       <div style="display:flex;align-items:center;gap:7px">
         <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#8a877c;white-space:nowrap">View projections</span>
@@ -85,7 +76,9 @@
       <tbody>
         <sc-for list="{{ gridRows }}" as="r" hint-placeholder-count="36">
           <tr style="break-inside:avoid">
-            <td style="padding:4px 6px 4px 0;border-bottom:1px solid #f4f1e6;font-size:9.5px;font-weight:800;text-transform:uppercase;color:#16161a;white-space:nowrap">{{ r.name }}</td>
+            <td style="padding:4px 6px 4px 0;border-bottom:1px solid #f4f1e6;font-size:9.5px;font-weight:800;text-transform:uppercase;color:#16161a;white-space:nowrap">
+              <span style="display:inline-flex;align-items:center;gap:5px">{{ r.markImg }}<span>{{ r.name }}</span></span>
+            </td>
             <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="8">
               <td style="padding:0;border-bottom:1px solid #f4f1e6"><div style="padding:4px 2px 5px;text-align:center;line-height:1.15;background:{{ c.bg }};color:{{ c.fg }};opacity:{{ c.opacity }}"><div style="font-size:7px;font-weight:800;letter-spacing:-0.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.label }}</div><div style="font-size:9.5px;font-weight:900;font-variant-numeric:tabular-nums;margin-top:1px">{{ c.value }}</div></div></td>
             </sc-for>
@@ -95,7 +88,7 @@
       </tbody>
     </table></div>
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 20px;margin-top:12px">
-      <p style="font-family:Archivo,sans-serif;font-size:11px;line-height:1.5;color:#7a7870;margin:0;max-width:32em">Cells name the opponent, shaded by difficulty; (H) and (A) mark venue. The <strong style="font-weight:800">Span</strong> column is mean difficulty over the highlighted matchdays, and the table sorts by it &mdash; narrow the span to find who has the worst run through any stretch of the league phase. Source: FPL Schaden MD1&ndash;8 team projections, in <code style="font-size:10.5px">data/ucl-projected-goals.json</code>.</p>
+      <p style="font-family:Archivo,sans-serif;font-size:11px;line-height:1.5;color:#7a7870;margin:0;max-width:32em">Cells name the opponent, shaded by difficulty; (H) and (A) mark venue. The <strong style="font-weight:800">Span</strong> column is mean difficulty over the selected matchdays only, and the table sorts by it. Deselect the matchdays a chip will cover to see who has the best run through the ones you actually need to plan for. Source: FPL Schaden MD1&ndash;8 team projections, captured 11 October 2026, in <code style="font-size:10.5px">data/ucl-projected-goals.json</code>.</p>
       <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
         <span style="font-family:Archivo,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#8a877c">Easy</span>
         <sc-for list="{{ legend }}" as="l" hint-placeholder-count="5">
@@ -583,7 +576,7 @@
   </sc-if>
   </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;fantasyGameday&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:13,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Player prices&quot;},&quot;spanFrom&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:8,&quot;step&quot;:1,&quot;unit&quot;:&quot;MD&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;spanTo&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:8,&quot;min&quot;:1,&quot;max&quot;:8,&quot;step&quot;:1,&quot;unit&quot;:&quot;MD&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;gridSort&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Easiest first&quot;,&quot;Hardest first&quot;,&quot;Alphabetical&quot;],&quot;default&quot;:&quot;Easiest first&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;scalePoints&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[3,5,10],&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Rating scale&quot;},&quot;showWorkedExample&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;},&quot;showExclusions&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;matchdays&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;1,2,3,4,5,6,7,8&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;gridSort&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Easiest first&quot;,&quot;Hardest first&quot;,&quot;Alphabetical&quot;],&quot;default&quot;:&quot;Easiest first&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Difficulty grid&quot;},&quot;fantasyGameday&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:13,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Player prices&quot;},&quot;scalePoints&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[3,5,10],&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Rating scale&quot;},&quot;showWorkedExample&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;},&quot;showExclusions&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
 class Component extends DCLogic {
   state = {
     grid: null, legend: null, from: null, to: null, sort: null, tab: 'ratings',
@@ -595,7 +588,7 @@ class Component extends DCLogic {
   componentDidMount() {
     import('./lib/fdr-grid.js').then(m => {
       this.grid = m;
-      this.setState({ grid: m.buildGrid(this.spanFrom, this.spanTo, this.sortMode, this.metric), legend: m.legend });
+      this.setState({ grid: m.buildGrid(this.days, this.sortMode, this.metric), legend: m.legend });
     });
     import('./lib/fantasy-players.js').then(m => {
       this.fantasy = m;
@@ -654,13 +647,30 @@ class Component extends DCLogic {
 
   componentDidUpdate(prev) {
     if (!this.grid) return;
-    if (prev.spanFrom !== this.props.spanFrom || prev.spanTo !== this.props.spanTo || prev.gridSort !== this.props.gridSort) {
-      this.setState({ from: null, to: null, sort: null }, () => this.rebuild());
+    if (prev.matchdays !== this.props.matchdays || prev.gridSort !== this.props.gridSort) {
+      this.setState({ days: null, sort: null }, () => this.rebuild());
     }
   }
 
   rebuild() {
-    this.setState({ grid: this.grid.buildGrid(this.spanFrom, this.spanTo, this.sortMode, this.metric) });
+    this.setState({ grid: this.grid.buildGrid(this.days, this.sortMode, this.metric) });
+  }
+
+  get days() {
+    if (this.state.days) return this.state.days;
+    const raw = String(this.props.matchdays ?? '1,2,3,4,5,6,7,8');
+    const parsed = raw.split(/[^0-9]+/).map(Number).filter(d => d >= 1 && d <= 8);
+    return parsed.length ? [...new Set(parsed)].sort((a, b) => a - b) : [1, 2, 3, 4, 5, 6, 7, 8];
+  }
+
+  toggleDay(n) {
+    const cur = this.days;
+    const next = cur.includes(n) ? cur.filter(d => d !== n) : cur.concat(n).sort((a, b) => a - b);
+    this.setState({ days: next.length ? next : cur }, () => this.rebuild());
+  }
+
+  allDays() {
+    this.setState({ days: [1, 2, 3, 4, 5, 6, 7, 8] }, () => this.rebuild());
   }
 
   setMetric(metric) {
@@ -778,7 +788,15 @@ class Component extends DCLogic {
     });
     return {
       ramp,
-      gridRows: this.state.grid || [],
+      gridRows: (this.state.grid || []).map(r => {
+        const mark = this.fantasy && r.code ? this.fantasy.clubMark(r.code) : null;
+        return Object.assign({}, r, {
+          markImg: mark && mark.src ? React.createElement('img', {
+            src: mark.src, alt: r.name,
+            style: { display: 'block', width: '14px', height: '14px', flex: '0 0 14px' }
+          }) : null
+        });
+      }),
       legend: this.state.legend || [],
       onRatings: this.state.tab === 'ratings',
       onPlayers: this.state.tab === 'players',
@@ -823,9 +841,15 @@ class Component extends DCLogic {
       })),
       mdHeads: Array.from({ length: 8 }, (_, i) => ({
         label: 'MD' + (i + 1),
-        color: (i + 1 >= this.spanFrom && i + 1 <= this.spanTo) ? '#c8202e' : '#c2beb2'
+        color: this.days.includes(i + 1) ? '#c8202e' : '#c2beb2'
       })),
-      spanLabel: this.spanFrom === this.spanTo ? ('MD' + this.spanFrom) : ('MD' + this.spanFrom + '\u2013' + this.spanTo),
+      dayButtons: Array.from({ length: 8 }, (_, i) => ({
+        label: String(i + 1),
+        onClick: () => this.toggleDay(i + 1),
+        ...this.chip(this.days.includes(i + 1))
+      })),
+      onAllDays: () => this.allDays(),
+      spanLabel: this.days.length === 8 ? 'All matchdays' : 'MD ' + this.days.join(', '),
       sortLabel: this.sortMode === 'Alphabetical' ? 'Alphabetical' : 'Sorted by span \u2014 ' + this.sortMode.toLowerCase(),
       projectionStats: this.projectionStats(),
       metricButtons: [
@@ -845,11 +869,8 @@ class Component extends DCLogic {
         : this.metric === 'Defence'
         ? 'Cells carry each team\u2019s projected goals against. Difficulty rises as that figure rises \u2014 this is the view for defenders and goalkeepers.'
         : 'Cells carry projected goal difference, goals for minus goals against. A single ordering when you want one number rather than the split.',
-      spanFrom: this.spanFrom,
-      spanTo: this.spanTo,
-      matchdayOptions: Array.from({ length: 8 }, (_, i) => ({ value: String(i + 1), label: 'Matchday ' + (i + 1) })),
-      onFromChange: e => this.setSpan(parseInt(e.target.value, 10), null),
-      onToChange: e => this.setSpan(null, parseInt(e.target.value, 10)),
+
+
       sortButtons: ['Easiest first', 'Hardest first', 'Alphabetical'].map(m => ({
         label: m === 'Alphabetical' ? 'A\u2013Z' : m.replace(' first', ''),
         onClick: () => this.setSort(m),
