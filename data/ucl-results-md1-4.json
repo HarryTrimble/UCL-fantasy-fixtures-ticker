@@ -1,0 +1,509 @@
+{
+ "source": "UEFA.com league phase results, checked against Wikipedia and match reports, 18 November 2026",
+ "matches": [
+  {
+   "md": 1,
+   "home": "AEK Athens",
+   "away": "LASK",
+   "homeGoals": 1,
+   "awayGoals": 0
+  },
+  {
+   "md": 1,
+   "home": "Club Brugge",
+   "away": "Aston Villa",
+   "homeGoals": 2,
+   "awayGoals": 3
+  },
+  {
+   "md": 1,
+   "home": "Borussia Dortmund",
+   "away": "Villarreal",
+   "homeGoals": 3,
+   "awayGoals": 2
+  },
+  {
+   "md": 1,
+   "home": "Porto",
+   "away": "Manchester City",
+   "homeGoals": 0,
+   "awayGoals": 2
+  },
+  {
+   "md": 1,
+   "home": "Lille",
+   "away": "Real Betis",
+   "homeGoals": 2,
+   "awayGoals": 3
+  },
+  {
+   "md": 1,
+   "home": "Real Madrid",
+   "away": "Inter",
+   "homeGoals": 2,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Barcelona",
+   "away": "Feyenoord",
+   "homeGoals": 5,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Stuttgart",
+   "away": "Viking",
+   "homeGoals": 3,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Liverpool",
+   "away": "Atlético de Madrid",
+   "homeGoals": 2,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Paris Saint-Germain",
+   "away": "Slovan Bratislava",
+   "homeGoals": 6,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Sporting CP",
+   "away": "Galatasaray",
+   "homeGoals": 3,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Napoli",
+   "away": "Arsenal",
+   "homeGoals": 0,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Fenerbahçe",
+   "away": "Roma",
+   "homeGoals": 1,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "PSV Eindhoven",
+   "away": "Shakhtar Donetsk",
+   "homeGoals": 1,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Como",
+   "away": "Leipzig",
+   "homeGoals": 4,
+   "awayGoals": 1
+  },
+  {
+   "md": 1,
+   "home": "Bayern München",
+   "away": "Bodø/Glimt",
+   "homeGoals": 5,
+   "awayGoals": 0
+  },
+  {
+   "md": 1,
+   "home": "Manchester United",
+   "away": "Sabah",
+   "homeGoals": 4,
+   "awayGoals": 0
+  },
+  {
+   "md": 1,
+   "home": "Slavia Praha",
+   "away": "Lens",
+   "homeGoals": 2,
+   "awayGoals": 3
+  },
+  {
+   "md": 2,
+   "home": "Lens",
+   "away": "Sporting CP",
+   "homeGoals": 0,
+   "awayGoals": 2
+  },
+  {
+   "md": 2,
+   "home": "Sabah",
+   "away": "Slavia Praha",
+   "homeGoals": 2,
+   "awayGoals": 0
+  },
+  {
+   "md": 2,
+   "home": "Arsenal",
+   "away": "Lille",
+   "homeGoals": 3,
+   "awayGoals": 0
+  },
+  {
+   "md": 2,
+   "home": "Atlético de Madrid",
+   "away": "Manchester United",
+   "homeGoals": 2,
+   "awayGoals": 0
+  },
+  {
+   "md": 2,
+   "home": "Inter",
+   "away": "Club Brugge",
+   "homeGoals": 3,
+   "awayGoals": 4
+  },
+  {
+   "md": 2,
+   "home": "Galatasaray",
+   "away": "Barcelona",
+   "homeGoals": 1,
+   "awayGoals": 4
+  },
+  {
+   "md": 2,
+   "home": "Leipzig",
+   "away": "PSV Eindhoven",
+   "homeGoals": 1,
+   "awayGoals": 0
+  },
+  {
+   "md": 2,
+   "home": "Viking",
+   "away": "Bayern München",
+   "homeGoals": 3,
+   "awayGoals": 3
+  },
+  {
+   "md": 2,
+   "home": "Villarreal",
+   "away": "Napoli",
+   "homeGoals": 3,
+   "awayGoals": 1
+  },
+  {
+   "md": 2,
+   "home": "Feyenoord",
+   "away": "Como",
+   "homeGoals": 3,
+   "awayGoals": 2
+  },
+  {
+   "md": 2,
+   "home": "LASK",
+   "away": "Liverpool",
+   "homeGoals": 3,
+   "awayGoals": 6
+  },
+  {
+   "md": 2,
+   "home": "Roma",
+   "away": "Real Madrid",
+   "homeGoals": 3,
+   "awayGoals": 4
+  },
+  {
+   "md": 2,
+   "home": "Aston Villa",
+   "away": "Fenerbahçe",
+   "homeGoals": 6,
+   "awayGoals": 0
+  },
+  {
+   "md": 2,
+   "home": "Shakhtar Donetsk",
+   "away": "AEK Athens",
+   "homeGoals": 3,
+   "awayGoals": 1
+  },
+  {
+   "md": 2,
+   "home": "Bodø/Glimt",
+   "away": "Borussia Dortmund",
+   "homeGoals": 1,
+   "awayGoals": 0
+  },
+  {
+   "md": 2,
+   "home": "Manchester City",
+   "away": "Paris Saint-Germain",
+   "homeGoals": 2,
+   "awayGoals": 4
+  },
+  {
+   "md": 2,
+   "home": "Real Betis",
+   "away": "Porto",
+   "homeGoals": 3,
+   "awayGoals": 2
+  },
+  {
+   "md": 2,
+   "home": "Slovan Bratislava",
+   "away": "Stuttgart",
+   "homeGoals": 0,
+   "awayGoals": 3
+  },
+  {
+   "md": 3,
+   "home": "Fenerbahçe",
+   "away": "Slavia Praha",
+   "homeGoals": 2,
+   "awayGoals": 2
+  },
+  {
+   "md": 3,
+   "home": "Sabah",
+   "away": "Borussia Dortmund",
+   "homeGoals": 1,
+   "awayGoals": 2
+  },
+  {
+   "md": 3,
+   "home": "Roma",
+   "away": "Slovan Bratislava",
+   "homeGoals": 4,
+   "awayGoals": 0
+  },
+  {
+   "md": 3,
+   "home": "Porto",
+   "away": "PSV Eindhoven",
+   "homeGoals": 0,
+   "awayGoals": 1
+  },
+  {
+   "md": 3,
+   "home": "Liverpool",
+   "away": "Villarreal",
+   "homeGoals": 4,
+   "awayGoals": 3
+  },
+  {
+   "md": 3,
+   "home": "Manchester City",
+   "away": "AEK Athens",
+   "homeGoals": 5,
+   "awayGoals": 1
+  },
+  {
+   "md": 3,
+   "home": "Paris Saint-Germain",
+   "away": "Barcelona",
+   "homeGoals": 4,
+   "awayGoals": 2
+  },
+  {
+   "md": 3,
+   "home": "Napoli",
+   "away": "Bodø/Glimt",
+   "homeGoals": 4,
+   "awayGoals": 3
+  },
+  {
+   "md": 3,
+   "home": "Stuttgart",
+   "away": "Atlético de Madrid",
+   "homeGoals": 1,
+   "awayGoals": 1
+  },
+  {
+   "md": 3,
+   "home": "Como",
+   "away": "Manchester United",
+   "homeGoals": 4,
+   "awayGoals": 1
+  },
+  {
+   "md": 3,
+   "home": "Lille",
+   "away": "Galatasaray",
+   "homeGoals": 2,
+   "awayGoals": 4
+  },
+  {
+   "md": 3,
+   "home": "Aston Villa",
+   "away": "Viking",
+   "homeGoals": 3,
+   "awayGoals": 1
+  },
+  {
+   "md": 3,
+   "home": "Club Brugge",
+   "away": "Lens",
+   "homeGoals": 3,
+   "awayGoals": 0
+  },
+  {
+   "md": 3,
+   "home": "Bayern München",
+   "away": "Arsenal",
+   "homeGoals": 2,
+   "awayGoals": 2
+  },
+  {
+   "md": 3,
+   "home": "Inter",
+   "away": "Shakhtar Donetsk",
+   "homeGoals": 1,
+   "awayGoals": 0
+  },
+  {
+   "md": 3,
+   "home": "Real Madrid",
+   "away": "Leipzig",
+   "homeGoals": 4,
+   "awayGoals": 1
+  },
+  {
+   "md": 3,
+   "home": "Real Betis",
+   "away": "Feyenoord",
+   "homeGoals": 1,
+   "awayGoals": 0
+  },
+  {
+   "md": 3,
+   "home": "Sporting CP",
+   "away": "LASK",
+   "homeGoals": 2,
+   "awayGoals": 3
+  },
+  {
+   "md": 4,
+   "home": "Shakhtar Donetsk",
+   "away": "Sporting CP",
+   "homeGoals": 0,
+   "awayGoals": 1
+  },
+  {
+   "md": 4,
+   "home": "Galatasaray",
+   "away": "Stuttgart",
+   "homeGoals": 2,
+   "awayGoals": 0
+  },
+  {
+   "md": 4,
+   "home": "Atlético de Madrid",
+   "away": "Bayern München",
+   "homeGoals": 0,
+   "awayGoals": 2
+  },
+  {
+   "md": 4,
+   "home": "Barcelona",
+   "away": "Aston Villa",
+   "homeGoals": 3,
+   "awayGoals": 0
+  },
+  {
+   "md": 4,
+   "home": "Feyenoord",
+   "away": "Inter",
+   "homeGoals": 0,
+   "awayGoals": 3
+  },
+  {
+   "md": 4,
+   "home": "Bodø/Glimt",
+   "away": "Lille",
+   "homeGoals": 0,
+   "awayGoals": 0
+  },
+  {
+   "md": 4,
+   "home": "LASK",
+   "away": "Slovan Bratislava",
+   "homeGoals": 4,
+   "awayGoals": 0
+  },
+  {
+   "md": 4,
+   "home": "Manchester United",
+   "away": "Roma",
+   "homeGoals": 3,
+   "awayGoals": 2
+  },
+  {
+   "md": 4,
+   "home": "Villarreal",
+   "away": "Paris Saint-Germain",
+   "homeGoals": 0,
+   "awayGoals": 6
+  },
+  {
+   "md": 4,
+   "home": "AEK Athens",
+   "away": "Real Madrid",
+   "homeGoals": 2,
+   "awayGoals": 3
+  },
+  {
+   "md": 4,
+   "home": "Fenerbahçe",
+   "away": "Liverpool",
+   "homeGoals": 3,
+   "awayGoals": 2
+  },
+  {
+   "md": 4,
+   "home": "Borussia Dortmund",
+   "away": "Real Betis",
+   "homeGoals": 2,
+   "awayGoals": 1
+  },
+  {
+   "md": 4,
+   "home": "Porto",
+   "away": "Napoli",
+   "homeGoals": 4,
+   "awayGoals": 1
+  },
+  {
+   "md": 4,
+   "home": "PSV Eindhoven",
+   "away": "Club Brugge",
+   "homeGoals": 1,
+   "awayGoals": 2
+  },
+  {
+   "md": 4,
+   "home": "Leipzig",
+   "away": "Manchester City",
+   "homeGoals": 2,
+   "awayGoals": 3
+  },
+  {
+   "md": 4,
+   "home": "Lens",
+   "away": "Como",
+   "homeGoals": 1,
+   "awayGoals": 9
+  },
+  {
+   "md": 4,
+   "home": "Slavia Praha",
+   "away": "Arsenal",
+   "homeGoals": 1,
+   "awayGoals": 2
+  },
+  {
+   "md": 4,
+   "home": "Viking",
+   "away": "Sabah",
+   "homeGoals": 4,
+   "awayGoals": 1
+  }
+ ]
+}
