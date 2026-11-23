@@ -18,6 +18,14 @@
   a{color:#c8202e;text-decoration-color:#dfa9ae;text-underline-offset:2px}
   a:hover{color:#16161a}
   .kept{break-inside:avoid;orphans:3;widows:3}
+  .fdr-table .fdr-team{width:108px}
+  .fdr-table .fdr-span{width:48px}
+  @media (max-width:560px){
+    .fdr-table .fdr-team{width:76px}
+    .fdr-table .fdr-span{width:36px}
+    .fdr-table td:first-child{font-size:8.5px !important;padding-right:3px !important}
+    .fdr-table td:first-child img{display:none !important}
+  }
   .pf{font-family:Archivo,sans-serif;display:grid;gap:22px}
   .pf-take{font-size:15px;line-height:1.55;color:#2b2b2e;margin:0;max-width:38em}
   .pf-take b{font-weight:800;color:#16161a;font-variant-numeric:tabular-nums}
@@ -101,24 +109,20 @@
         </div>
       </div>
     </div>
-    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;border-bottom:1px solid #d8d3c3;padding-bottom:6px;margin-bottom:8px">
-      <span style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#16161a">{{ metricLabel }} &nbsp;&mdash;&nbsp; {{ sortLabel }}</span>
-      <span style="font-family:Archivo,sans-serif;font-size:8.5px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#c8202e">{{ spanLabel }}</span>
-    </div>
-    <div style="max-width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:700px;width:100%;border-collapse:collapse;table-layout:fixed;font-family:Archivo,sans-serif">
+    <div style="max-width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="fdr-table" style="min-width:{{ gridMinWidth }};width:100%;border-collapse:collapse;table-layout:fixed;font-family:Archivo,sans-serif">
       <thead>
         <tr>
-          <th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 4px 5px 0;border-bottom:1px solid #16161a;width:14%">Team</th>
+          <th style="text-align:left;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#8a877c;padding:0 4px 5px 0;border-bottom:1px solid #16161a" class="fdr-team">Team</th>
           <sc-for list="{{ mdHeads }}" as="m" hint-placeholder-count="4">
-            <th style="text-align:center;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:0 2px 5px 0;border-bottom:1px solid #16161a;width:18%;color:{{ m.color }}">{{ m.label }}<div style="font-size:7px;font-weight:600;letter-spacing:0.02em;text-transform:none;color:#8a877c;margin-top:2px">{{ m.dates }}</div></th>
+            <th style="text-align:center;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:0 2px 5px 0;border-bottom:1px solid #16161a;color:{{ m.color }}">{{ m.label }}<div style="font-size:7px;font-weight:600;letter-spacing:0.02em;text-transform:none;color:#8a877c;margin-top:2px">{{ m.dates }}</div></th>
           </sc-for>
-          <th style="text-align:right;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#c8202e;padding:0 0 5px 6px;border-bottom:1px solid #16161a;width:9%">Span</th>
+          <th style="text-align:right;font-size:7.5px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#c8202e;padding:0 0 5px 6px;border-bottom:1px solid #16161a" class="fdr-span">Span</th>
         </tr>
       </thead>
       <tbody>
         <sc-for list="{{ gridRows }}" as="r" hint-placeholder-count="36">
           <tr style="break-inside:avoid">
-            <td style="padding:4px 6px 4px 0;border-bottom:1px solid #f4f1e6;font-size:9.5px;font-weight:800;text-transform:uppercase;color:#16161a;white-space:nowrap">
+            <td style="padding:4px 6px 4px 0;border-bottom:1px solid #f4f1e6;font-size:9.5px;font-weight:800;text-transform:uppercase;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
               <span style="display:inline-flex;align-items:center;gap:5px">{{ r.markImg }}<span>{{ r.name }}</span></span>
             </td>
             <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4">
@@ -856,7 +860,7 @@ class Component extends DCLogic {
       gridRows: (this.state.grid || []).map(r => {
         const mark = this.fantasy && r.code ? this.fantasy.clubMark(r.code) : null;
         return Object.assign({}, r, {
-          cells: r.cells.slice(FIRST_MD - 1).map((c, i) => Object.assign({}, c, { day: (MD_DAYS[r.name] || [])[FIRST_MD - 1 + i] || '' })),
+          cells: r.cells.slice(FIRST_MD - 1).map((c, i) => Object.assign({}, c, { md: FIRST_MD + i, opacity: '1', day: (MD_DAYS[r.name] || [])[FIRST_MD - 1 + i] || '' })).filter(c => this.days.includes(c.md)),
           markImg: mark && mark.src ? React.createElement('img', {
             src: mark.src, alt: r.name,
             style: { display: 'block', width: '14px', height: '14px', flex: '0 0 14px' }
@@ -915,7 +919,8 @@ class Component extends DCLogic {
         bg: this.state.tab === id ? '#16161a' : 'transparent',
         fg: this.state.tab === id ? '#f4f1e6' : '#8a877c'
       })),
-      mdHeads: REMAINING_MDS.map(d => ({
+      gridMinWidth: (112 + this.days.length * 52) + 'px',
+      mdHeads: REMAINING_MDS.filter(d => this.days.includes(d)).map(d => ({
         label: 'MD' + d,
         dates: MD_DATES[d],
         color: this.days.includes(d) ? '#c8202e' : '#c2beb2'
